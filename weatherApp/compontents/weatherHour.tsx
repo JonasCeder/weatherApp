@@ -1,11 +1,13 @@
 import { Hour } from "@/interfaces/hour";
 import { View, Text, StyleSheet } from "react-native";
 import WeatherIcon from "./weatherIcon";
+import moment from "moment"
 
 export default function WeatherHour({ hour }: { hour: Hour }) {
+  const time = moment(hour.date);
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>{hour.time}</Text>
+      <Text style={styles.text}>{time.format("hh:mm")}</Text>
       <View style={styles.weatherIcon}>
         <WeatherIcon symbolCode={hour.weatherSymbol?.symbol}></WeatherIcon>
       </View>

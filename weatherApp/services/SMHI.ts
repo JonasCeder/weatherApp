@@ -16,10 +16,11 @@ export const getSMHIWeatherData = async ({ lat, lon }: { lat: string, lon: strin
   let hours = [] as Hour[];
   weatherData.timeSeries.map((result: any) => {
     const weatherSymbol = getWeatherSymbolById(result.data.symbol_code);
+    const date = new Date(result.time);
     const hour: Hour = {
       temp: result.data.air_temperature,
       weatherSymbol: weatherSymbol,
-      time: result.time
+      date: date
     };
     hours.push(hour);
   })

@@ -12,10 +12,11 @@ export const getYRWeatherData = async ({ lat, lon }: { lat: string, lon: string 
 
   let hours = [] as Hour[];
   weatherData.properties.timeseries.map((result: any) => {
+    const date = new Date(result.time);
     const hour: Hour = {
       temp: result.data.instant.details.air_temperature,
       // symbolCode: result.data.instant.details.symbol_code,
-      time: result.time
+      date: date
     };
     hours.push(hour)
   })

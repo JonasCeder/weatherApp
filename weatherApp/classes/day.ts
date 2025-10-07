@@ -9,7 +9,7 @@ export class Day {
     if (!hours || hours === undefined) this.Hours = [];
 
     hours = hours.filter((hour) => {
-      const hourTime = hour.time.slice(0, -1);
+      const hourTime = hour.date.toISOString().slice(0, -1);
       const hourDate: Date = new Date(Date.parse(hourTime));
       const todayDate: Date = new Date(Date.now());
 

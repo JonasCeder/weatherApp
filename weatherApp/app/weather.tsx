@@ -6,7 +6,7 @@ import { BlurView } from "expo-blur"
 import { LinearGradient } from 'expo-linear-gradient';
 import WeatherCard from "@/compontents/weatherCard";
 import { Hour } from "@/interfaces/hour";
-import { Day } from "@/interfaces/day";
+import { Day } from "@/classes/day";
 import WeatherHour from "@/compontents/weatherHour";
 
 export default function Weather() {

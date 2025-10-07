@@ -1,7 +1,7 @@
 import { WeatherSymbol } from "@/classes/weatherSymbol";
 
 export interface Hour {
-  time?: string;
+  date?: Date;
   temp?: number;
   weatherSymbol?: WeatherSymbol;
 };
