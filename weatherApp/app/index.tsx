@@ -11,14 +11,11 @@ export default function Index() {
 
   const getSelectedWeatherServices = async () => {
     const selectedWeatherServices = await loadWeatherServiceSelectionState();
-    debugger;
     if (selectedWeatherServices && selectedWeatherServices.length > 0) {
       router.navigate('./weather');
     } else {
       router.navigate('./weatherServiceSelection');
     }
   };
-
-  return (<div></div>);
 }
 

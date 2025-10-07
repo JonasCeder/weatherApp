@@ -1,4 +1,4 @@
 export enum WeatherService {
-  SMHI,
-  YR
+  SMHI = "SMHI",
+  YR = "YR",
 }
