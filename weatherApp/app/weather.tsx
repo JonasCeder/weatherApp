@@ -1,14 +1,37 @@
 import { View, StyleSheet } from "react-native";
 import WeatherServiceComponent from "./weatherServiceComponent";
 import { WeatherService } from "@/enums/weatherService";
+import { useEffect, useState } from "react";
+import { loadWeatherServiceSelectionState } from "@/state/selectedWeatherServiceState";
 
 export default function Weather() {
   // TODO Get coodrinates from phone location or a location picker
-  // TODO Get data based on weather service picked
+  // TODO Toggle weather services
+  // TODO Link to change services
+  // TODO Add 10 days
+  // TODO Day details?
+
+  const [weatherServices, setWeatherServices] = useState([] as WeatherService[]);
+  useEffect(() => {
+    getSelectedWeatherServices();
+  }, []);
+
+  const getSelectedWeatherServices = async () => {
+    const selectedWeatherServices = await loadWeatherServiceSelectionState();
+    if (selectedWeatherServices && selectedWeatherServices.length > 0) {
+      setWeatherServices(selectedWeatherServices);
+    }
+  }
+
   return (
     <View style={styles.container}>
-      <WeatherServiceComponent weatherService={WeatherService.SMHI}></WeatherServiceComponent>
-      <WeatherServiceComponent weatherService={WeatherService.YR}></WeatherServiceComponent>
+      {weatherServices.includes(WeatherService.SMHI) && (
+        <WeatherServiceComponent weatherService={WeatherService.SMHI}></WeatherServiceComponent>
+      )}
+
+      {weatherServices.includes(WeatherService.YR) && (
+        <WeatherServiceComponent weatherService={WeatherService.YR}></WeatherServiceComponent>
+      )}
     </View>
   )
 }
