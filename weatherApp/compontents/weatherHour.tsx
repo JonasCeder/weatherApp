@@ -7,9 +7,9 @@ export default function WeatherHour({ hour }: { hour: Hour }) {
   const time = moment(hour.date);
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>{time.format("hh:mm")}</Text>
+      <Text numberOfLines={1} style={styles.text}>{time.format("HH:mm")}</Text>
       <View style={styles.weatherIcon}>
-        <WeatherIcon symbolCode={hour.weatherSymbol?.symbol}></WeatherIcon>
+        <WeatherIcon hour={hour}></WeatherIcon>
       </View>
       <Text style={styles.text}>{hour.temp}°</Text>
     </View>
@@ -18,15 +18,22 @@ export default function WeatherHour({ hour }: { hour: Hour }) {
 
 const styles = StyleSheet.create({
   container: {
-    height: 100,
-    width: 30,
+    height: 120,
+    width: 60,
     borderRadius: 50,
-    backgroundColor: "#5738B2",
+    backgroundColor: "#F0F8FF",
+    display: "flex",
+    justifyContent: "space-between",
+    alignContent: "center",
+    alignItems: "center",
+    flexDirection: "column"
   },
   text: {
-    color: "#FFF"
+    color: "rgb(18, 33, 43)",
+    margin: 10,
   },
   weatherIcon: {
-
+    height: 40,
+    width: 40
   }
 })

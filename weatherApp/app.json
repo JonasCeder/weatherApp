@@ -9,7 +9,7 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false
     },
     "android": {
       "adaptiveIcon": {
@@ -38,7 +38,8 @@
             "backgroundColor": "#000000"
           }
         }
-      ]
+      ],
+      "expo-asset"
     ],
     "experiments": {
       "typedRoutes": true,

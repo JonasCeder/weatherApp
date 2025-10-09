@@ -1,22 +1,35 @@
-import { useState } from "react";
-import { SvgXml } from "react-native-svg";
+import { Hour } from "@/interfaces/hour";
+import { Image } from "expo-image";
+import moment from "moment";
+import React, { useEffect, useState } from "react";
+import { WEATHER_ICON_PATH } from "@/utils/weatherIconPaths";
 
-export default function WeatherIcon({ symbolCode }: { symbolCode?: string }) {
-  const [symbolCodeSvg, setSymbolCodeSvg] = useState("");
-  fetch(`${symbolCode}.svg`)
-    .then((res) => res.text())
-    .then((text) => {
-      if (text.startsWith("<svg")) {
-        setSymbolCodeSvg(text);
+export default function WeatherIcon({ hour }: { hour: Hour }) {
+  const [symbolCode, setSymbolCode] = useState("");
+
+  useEffect(() => {
+    if (hour && hour.date && hour.weatherSymbol) {
+
+      let weatherSymbol = hour.weatherSymbol?.symbolCode ?? "";
+      if (weatherSymbol === "") return;
+
+      const nightTimeLimit = 22;
+      const dayTimeLimit = 6;
+      const weatherSymbolCode = hour?.weatherSymbol?.symbolCode as keyof typeof WEATHER_ICON_PATH;
+      const hourTime = moment(hour.date).hours();
+
+      if ((hourTime > dayTimeLimit)) {
+        weatherSymbol = WEATHER_ICON_PATH[weatherSymbolCode].day;
       }
-    })
-    .catch((e) => console.error(e));
+      if ((hourTime > nightTimeLimit) || (hourTime < dayTimeLimit)) {
+        weatherSymbol = WEATHER_ICON_PATH[weatherSymbolCode].night;
+      }
+
+      setSymbolCode(weatherSymbol);
+    }
+  }, [hour])
 
   return (
-    <>
-      {symbolCodeSvg && symbolCodeSvg !== "" && (
-        <SvgXml xml={symbolCodeSvg} width='100%' height='100%' />
-      )}
-    </>
+    <Image style={{ width: '100%', height: '100%' }} source={symbolCode} />
   )
 }

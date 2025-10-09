@@ -9,7 +9,7 @@ export default function WeatherCard({ hour, maxTemp, minTemp }: { hour: Hour, ma
       <Text style={styles.highLowText}>H:{maxTemp}°C L:{minTemp}°C</Text>
       <Text style={styles.location}>Mora, Sweden</Text>
       <View style={styles.weatherIcon}>
-        <WeatherIcon symbolCode={hour.weatherSymbol?.symbol}></WeatherIcon>
+        <WeatherIcon hour={hour}></WeatherIcon>
       </View>
     </Pressable>
   )
@@ -17,21 +17,21 @@ export default function WeatherCard({ hour, maxTemp, minTemp }: { hour: Hour, ma
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#5738B2",
+    backgroundColor: "#F0F8FF",
     borderRadius: 10,
     height: 150,
     padding: 10,
-    marginTop: 50
+    marginTop: 30
   },
   tempText: {
     fontSize: 44,
-    color: "white",
+    color: "rgb(18, 33, 43)",
   },
   highLowText: {
-    color: "white"
+    color: "rgb(18, 33, 43)"
   },
   location: {
-    color: "white",
+    color: "rgb(18, 33, 43)",
   },
   weatherIcon: {
     position: "absolute",
