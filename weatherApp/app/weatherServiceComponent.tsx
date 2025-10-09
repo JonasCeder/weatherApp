@@ -7,10 +7,12 @@ import { Hour } from "@/interfaces/hour";
 import { Day } from "@/classes/day";
 import WeatherHour from "@/compontents/weatherHour";
 import { WeatherService } from "@/enums/weatherService";
+import { WEATHER_SERVICE_ICON_PATH } from "@/utils/weatherServiceIconPaths";
 
 export default function WeatherServiceComponent({ weatherService }: { weatherService: WeatherService }) {
   // TODO Get coodrinates from phone location or a location picker
   // TODO Get data based on weather service picked
+  const [logo, setLogo] = useState("")
   const [today, setToday] = useState({} as Day);
   const [now, setNow] = useState({} as Hour)
   const lat = "61.009722";
@@ -21,12 +23,14 @@ export default function WeatherServiceComponent({ weatherService }: { weatherSer
         getSMHIWeatherData({ lat, lon }).then((weatherData) => {
           setNow(weatherData.getWeatherNow());
           setToday(weatherData);
+          setLogo(WEATHER_SERVICE_ICON_PATH.shmhi);
         })
         break;
       case WeatherService.YR:
         getYRWeatherData({ lat, lon }).then((weatherData) => {
           setNow(weatherData.getWeatherNow());
           setToday(weatherData);
+          setLogo(WEATHER_SERVICE_ICON_PATH.yr);
         })
         break;
       default:
@@ -34,10 +38,21 @@ export default function WeatherServiceComponent({ weatherService }: { weatherSer
     }
   }, [weatherService])
 
+  const getLogoStyles = () => {
+    switch (weatherService) {
+      case WeatherService.SMHI:
+        return { resizeMode: "contain", width: 80 }
+      case WeatherService.YR:
+        return { resizeMode: "contain", height: 80, width: 80 }
+      default:
+        break;
+    }
+  }
+
   return (
     <View style={styles.containerGradient}>
       <View style={[styles.weatherServiceContaier, styles.smhiWeatherServiceContainer]}>
-        <Image style={styles.smhilogo} source={require("@/assets/SMHILogo.png")}></Image>
+        <Image style={getLogoStyles()} source={logo} />
         {now && (
           <WeatherCard hour={now} maxTemp={today.MaxTemp} minTemp={today.MinTemp}></WeatherCard>
         )}
@@ -64,7 +79,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF'
   },
   containerGradient: {
-    // position: 'absolute',
     left: 0,
     right: 0,
     top: 0,
