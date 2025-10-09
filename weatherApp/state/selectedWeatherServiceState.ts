@@ -17,6 +17,14 @@ export const saveWeatherServiceSelectionState = async (service: WeatherService) 
   }
 };
 
+export const saveWeatherServicesSelectionState = async (services: WeatherService[]) => {
+  try {
+    await AsyncStorage.setItem(SELECTED_WEATHER_SERVICE_KEY, JSON.stringify(services));
+  } catch (error) {
+    console.error("Error saving selection", error);
+  }
+};
+
 export const loadWeatherServiceSelectionState = async (): Promise<WeatherService[] | null> => {
   try {
     const weatherServicesString = await AsyncStorage.getItem(SELECTED_WEATHER_SERVICE_KEY);

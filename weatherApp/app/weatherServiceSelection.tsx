@@ -1,12 +1,34 @@
 import { View, StyleSheet, Pressable, Text, Image, TouchableOpacity } from "react-native";
-import { saveWeatherServiceSelectionState } from "@/state/selectedWeatherServiceState";
+import { loadWeatherServiceSelectionState, saveWeatherServiceSelectionState, saveWeatherServicesSelectionState } from "@/state/selectedWeatherServiceState";
 import { WeatherService } from "@/enums/weatherService";
 import { useRouter } from "expo-router";
+import { useEffect, useState } from "react";
 
 export default function WeatherServiceSelection() {
   const router = useRouter();
-  const handleWeatherServiceSelection = (weatherService: WeatherService) => {
-    saveWeatherServiceSelectionState(weatherService);
+
+  const [weatherServices, setWeatherServices] = useState([] as WeatherService[]);
+  useEffect(() => {
+    getSelectedWeatherServices();
+  }, []);
+
+  const getSelectedWeatherServices = async () => {
+    const selectedWeatherServices = await loadWeatherServiceSelectionState();
+    if (selectedWeatherServices && selectedWeatherServices.length > 0) {
+      setWeatherServices(selectedWeatherServices);
+    }
+  }
+
+  const handleWeatherServiceSelection = (selectedWeatherService: WeatherService) => {
+    let updatedSelectedWeatherServices = [];
+    if (weatherServices.includes(selectedWeatherService)) {
+      updatedSelectedWeatherServices = weatherServices.filter(weatherService => weatherService !== selectedWeatherService);
+    } else {
+      updatedSelectedWeatherServices = [...weatherServices, selectedWeatherService];
+    }
+
+    setWeatherServices(updatedSelectedWeatherServices);
+    saveWeatherServicesSelectionState(updatedSelectedWeatherServices);
   };
 
   const saveWeatherServiceSelection = () => {
@@ -18,9 +40,15 @@ export default function WeatherServiceSelection() {
       <View style={styles.viewContainer}>
         <Pressable style={[styles.weatherServiceButton, styles.shmhiServiceButton]} onPress={() => handleWeatherServiceSelection(WeatherService.SMHI)}>
           <Image style={styles.smhilogo} source={require("@/assets/SMHILogo.png")} />
+          {weatherServices.includes(WeatherService.SMHI) && (
+            <View style={styles.selected} />
+          )}
         </Pressable>
         <Pressable style={[styles.weatherServiceButton, styles.yrServiceButton]} onPress={() => handleWeatherServiceSelection(WeatherService.YR)}>
           <Image style={styles.yrlogo} source={require("@/assets/YRLogo.png")} />
+          {weatherServices.includes(WeatherService.YR) && (
+            <View style={styles.selected} />
+          )}
         </Pressable>
       </View>
       <TouchableOpacity onPress={saveWeatherServiceSelection} style={styles.saveButton}>
@@ -58,7 +86,11 @@ const styles = StyleSheet.create({
     borderWidth: 1
   },
   selected: {
+    position: "absolute",
+    height: "100%",
+    width: "100%",
     opacity: 0.5,
+    backgroundColor: "#CCC"
   },
   yrServiceButton: {
     backgroundColor: '#EEF5FF',
