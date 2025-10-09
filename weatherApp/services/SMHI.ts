@@ -12,10 +12,14 @@ export const getSMHIWeatherData = async ({ lat, lon }: { lat: string, lon: strin
   weatherData.timeSeries.map((result: any) => {
     const weatherSymbol = getWeatherSymbolById(result.data.symbol_code);
     const date = new Date(result.intervalParametersStartTime);
+    const probabilityOfPrecipitation = Math.ceil(result.data.probability_of_precipitation / 10) * 10;
     const hour: Hour = {
       temp: result.data.air_temperature,
       weatherSymbol: weatherSymbol,
-      date: date
+      date: date,
+      probabilityOfPrecipitation: probabilityOfPrecipitation,
+      precipitationAmountMax: result.data.precipitation_amount_max,
+      precipitationAmountMin: result.data.precipitation_amount_min,
     };
     hours.push(hour);
   })
