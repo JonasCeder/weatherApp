@@ -1,8 +1,8 @@
 import { View, StyleSheet } from "react-native";
-import WeatherServiceComponent from "./weatherServiceComponent";
 import { WeatherService } from "@/enums/weatherService";
 import { useEffect, useState } from "react";
 import { loadWeatherServiceSelectionState } from "@/state/selectedWeatherServiceState";
+import WeatherServiceComponent from "@/compontents/weatherServiceComponent";
 
 export default function Weather() {
   // TODO Get coodrinates from phone location or a location picker
@@ -50,7 +50,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF'
   },
   containerGradient: {
-    // position: 'absolute',
     left: 0,
     right: 0,
     top: 0,
