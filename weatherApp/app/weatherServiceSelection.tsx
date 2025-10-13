@@ -3,6 +3,7 @@ import { loadWeatherServiceSelectionState, saveWeatherServicesSelectionState } f
 import { WeatherService } from "@/enums/weatherService";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
+import BackButton from "@/compontents/backButton";
 
 export default function WeatherServiceSelection() {
   // TODO: Add back button
@@ -38,6 +39,9 @@ export default function WeatherServiceSelection() {
 
   return (
     <View style={styles.containerGradient}>
+      <View style={styles.headerContainer}>
+        <BackButton />
+      </View>
       <View style={styles.viewContainer}>
         <Pressable style={[styles.weatherServiceButton, styles.shmhiServiceButton]} onPress={() => handleWeatherServiceSelection(WeatherService.SMHI)}>
           <Image style={styles.smhilogo} source={require("@/assets/SMHILogo.png")} />
@@ -56,10 +60,12 @@ export default function WeatherServiceSelection() {
           )}
         </Pressable>
       </View>
-      <TouchableOpacity onPress={saveWeatherServiceSelection} style={styles.saveButton}>
-        <Text style={styles.saveButtonText}>Save</Text>
-      </TouchableOpacity>
-    </View>
+      <View style={styles.saveButtonContainer}>
+        <TouchableOpacity onPress={saveWeatherServiceSelection} style={styles.saveButton}>
+          <Text style={styles.saveButtonText}>Save</Text>
+        </TouchableOpacity>
+      </View>
+    </View >
   );
 }
 
@@ -71,15 +77,20 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     gap: 10,
+    padding: 5
+  },
+  headerContainer: {
+    height: 100,
+    backgroundColor: '#FFF',
+    borderBottomWidth: 1,
+    borderBottomColor: "#BBB",
+    marginBottom: 5,
+    width: "100%",
+    display: 'flex',
+    justifyContent: 'flex-end',
   },
   containerGradient: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
     height: '100%',
-    padding: 10,
-    marginTop: 50,
   },
   weatherServiceButton: {
     padding: 10,
@@ -113,13 +124,17 @@ const styles = StyleSheet.create({
   saveButton: {
     borderRadius: 10,
     marginTop: 10,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    backgroundColor: "rgb(18, 33, 43)"
+    paddingHorizontal: 22,
+    paddingVertical: 20,
+    backgroundColor: "rgb(18, 33, 43)",
   },
   saveButtonText: {
     color: "#FFF",
-    alignSelf: "center"
-  }
+    alignSelf: "center",
+    fontSize: 16,
+  },
+  saveButtonContainer: {
+    padding: 5
+  },
 })
 

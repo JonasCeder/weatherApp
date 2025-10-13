@@ -5,6 +5,7 @@ import { Location } from '@/types/location';
 import { useRouter } from 'expo-router';
 import { loadRecentLocationsState, saveRecentLocationState } from '@/state/recentLocationsState';
 import { useEffect, useState } from 'react';
+import BackButton from '@/compontents/backButton';
 
 export default function SearchLocation() {
   // NOTE: Add default locations based on service selected?
@@ -42,6 +43,9 @@ export default function SearchLocation() {
 
   return (
     <View style={styles.searchContainer}>
+      <View style={styles.headerContainer}>
+        <BackButton />
+      </View>
       <View>
         <GooglePlacesTextInput
           apiKey=""
@@ -63,9 +67,6 @@ export default function SearchLocation() {
   )
 }
 const styles = StyleSheet.create({
-  searchContainer: {
-    marginTop: 50
-  },
   recentLocation: {
     borderWidth: 1,
     borderColor: "rgb(18, 33, 43)",
@@ -84,7 +85,17 @@ const styles = StyleSheet.create({
     right: 20,
     top: 25,
     height: 30,
-  }
+  },
+  headerContainer: {
+    height: 100,
+    backgroundColor: '#FFF',
+    borderBottomWidth: 1,
+    borderBottomColor: "#BBB",
+    marginBottom: 5,
+    width: "100%",
+    display: 'flex',
+    justifyContent: 'flex-end',
+  },
 });
 
 const materialStyles = {
