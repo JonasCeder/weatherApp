@@ -8,15 +8,16 @@ import { Day } from "@/classes/day";
 import WeatherHour from "@/compontents/weatherHour";
 import { WeatherService } from "@/enums/weatherService";
 import { WEATHER_SERVICE_ICON_PATH } from "@/utils/weatherServiceIconPaths";
+import { Location } from "@/types/location";
 
-export default function WeatherServiceComponent({ weatherService }: { weatherService: WeatherService }) {
-  // TODO Get coodrinates from phone location or a location picker
-  // TODO Get data based on weather service picked
+export default function WeatherServiceComponent({ weatherService, location }: { weatherService: WeatherService, location: Location }) {
+  // TODO: Get coodrinates from phone location 
   const [logo, setLogo] = useState("")
   const [today, setToday] = useState({} as Day);
   const [now, setNow] = useState({} as Hour)
-  const lat = "61.009722";
-  const lon = "14.563611";
+  const lat = location.lat;
+  const lon = location.lon;
+
   useEffect(() => {
     switch (weatherService) {
       case WeatherService.SMHI:
@@ -54,7 +55,7 @@ export default function WeatherServiceComponent({ weatherService }: { weatherSer
       <View style={[styles.weatherServiceContaier, styles.smhiWeatherServiceContainer]}>
         <Image style={getLogoStyles()} source={logo} />
         {now && (
-          <WeatherCard hour={now} maxTemp={today.MaxTemp} minTemp={today.MinTemp}></WeatherCard>
+          <WeatherCard hour={now} maxTemp={today.MaxTemp} minTemp={today.MinTemp} location={location}></WeatherCard>
         )}
         <ScrollView horizontal={true} style={styles.scrollView}>
           <View style={styles.weatherHourContainer}>
@@ -83,7 +84,7 @@ const styles = StyleSheet.create({
     right: 0,
     top: 0,
     height: '100%',
-    padding: 10,
+    padding: 5,
     flex: 1
   },
   weatherHourContainer: {

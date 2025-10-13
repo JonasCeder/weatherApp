@@ -2,7 +2,7 @@ import { Day } from "@/classes/day";
 import { getWeatherSymbolBySymbolCode } from "@/classes/weatherSymbol";
 import { Hour } from "@/interfaces/hour";
 
-export const getYRWeatherData = async ({ lat, lon }: { lat: string, lon: string }): Promise<Day> => {
+export const getYRWeatherData = async ({ lat, lon }: { lat: number, lon: number }): Promise<Day> => {
   const weatherData = await fetch(`https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=${lat}&lon=${lon}`, {
     headers: {
       "User-Agent": "weatherApp (https://github.com/JonasCeder/weatherApp)",

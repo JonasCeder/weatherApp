@@ -1,5 +1,5 @@
 import { View, StyleSheet, Pressable, Text, Image, TouchableOpacity } from "react-native";
-import { loadWeatherServiceSelectionState, saveWeatherServiceSelectionState, saveWeatherServicesSelectionState } from "@/state/selectedWeatherServiceState";
+import { loadWeatherServiceSelectionState, saveWeatherServicesSelectionState } from "@/state/selectedWeatherServiceState";
 import { WeatherService } from "@/enums/weatherService";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
@@ -41,13 +41,17 @@ export default function WeatherServiceSelection() {
         <Pressable style={[styles.weatherServiceButton, styles.shmhiServiceButton]} onPress={() => handleWeatherServiceSelection(WeatherService.SMHI)}>
           <Image style={styles.smhilogo} source={require("@/assets/SMHILogo.png")} />
           {weatherServices.includes(WeatherService.SMHI) && (
-            <View style={styles.selected} />
+            <View style={styles.selected}>
+              <Image source={require("@/assets/check_circle.svg")} />
+            </View>
           )}
         </Pressable>
         <Pressable style={[styles.weatherServiceButton, styles.yrServiceButton]} onPress={() => handleWeatherServiceSelection(WeatherService.YR)}>
           <Image style={styles.yrlogo} source={require("@/assets/YRLogo.png")} />
           {weatherServices.includes(WeatherService.YR) && (
-            <View style={styles.selected} />
+            <View style={styles.selected}>
+              <Image source={require("@/assets/check_circle.svg")} />
+            </View>
           )}
         </Pressable>
       </View>
@@ -73,7 +77,8 @@ const styles = StyleSheet.create({
     right: 0,
     top: 0,
     height: '100%',
-    padding: 10
+    padding: 10,
+    marginTop: 50,
   },
   weatherServiceButton: {
     padding: 10,
@@ -93,7 +98,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#CCC"
   },
   yrServiceButton: {
-    backgroundColor: '#EEF5FF',
+    borderColor: "rgb(18, 33, 43)",
   },
   yrlogo: {
     height: 40,
@@ -109,10 +114,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
     paddingHorizontal: 12,
     paddingVertical: 10,
-    backgroundColor: "#F0F8FF"
+    backgroundColor: "rgb(18, 33, 43)"
   },
   saveButtonText: {
-    color: "rgb(18, 33, 43)",
+    color: "#FFF",
     alignSelf: "center"
   }
 })

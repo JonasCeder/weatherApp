@@ -1,13 +1,15 @@
 import { Hour } from "@/interfaces/hour";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import WeatherIcon from "./weatherIcon";
+import { Location } from "@/types/location";
 
-export default function WeatherCard({ hour, maxTemp, minTemp }: { hour: Hour, maxTemp?: number, minTemp?: number }) {
+export default function WeatherCard({ hour, maxTemp, minTemp, location }: { hour: Hour, maxTemp?: number, minTemp?: number, location: Location }) {
+
   return (
     <Pressable style={styles.container}>
       <Text style={styles.tempText}>{hour.temp}°C</Text>
       <Text style={styles.highLowText}>H:{maxTemp}°C L:{minTemp}°C</Text>
-      <Text style={styles.location}>Mora, Sweden</Text>
+      <Text style={styles.location}>{location.name}</Text>
       <View style={styles.weatherIcon}>
         <WeatherIcon hour={hour}></WeatherIcon>
       </View>

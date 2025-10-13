@@ -3,7 +3,7 @@ import { Day } from "@/classes/day";
 import { Hour } from "@/interfaces/hour";
 
 const baseUrl = "https://opendata-download-metfcst.smhi.se/api/category/snow1g/version/1";
-export const getSMHIWeatherData = async ({ lat, lon }: { lat: string, lon: string }): Promise<Day> => {
+export const getSMHIWeatherData = async ({ lat, lon }: { lat: number, lon: number }): Promise<Day> => {
   const weatherData = await fetch(`${baseUrl}/geotype/point/lon/${lon}/lat/${lat}/data.json`).then(async (result) => {
     return result.json();
   })

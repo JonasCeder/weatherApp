@@ -19,7 +19,8 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.jonasceder.weatherApp"
     },
     "web": {
       "output": "static",
@@ -39,10 +40,17 @@
           }
         }
       ],
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "4cfe9a0e-d054-405b-a733-ffe4edee7a6a"
+      }
     }
   }
 }

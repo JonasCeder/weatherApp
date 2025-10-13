@@ -1,43 +1,91 @@
-import { View, StyleSheet, ScrollView } from "react-native";
+import { ScrollView, View, StyleSheet, Text, Image, Pressable } from "react-native";
 import { WeatherService } from "@/enums/weatherService";
 import { useEffect, useState } from "react";
 import { loadWeatherServiceSelectionState } from "@/state/selectedWeatherServiceState";
 import WeatherServiceComponent from "@/compontents/weatherServiceComponent";
+import { useRouter } from "expo-router";
+import { loadLocationState } from "@/state/locationState";
+import { Location } from "@/types/location";
 
 export default function Weather() {
-  // TODO Get coodrinates from phone location or a location picker
-  // TODO Toggle weather services
-  // TODO Link to change services
-  // TODO Add 10 days
-  // TODO Day details?
+  // TODO: Get coodrinates from phone location
+  // TODO: Add 10 days
+  // TODO: Day details?
+  // TODO: Fetch cache
+  // TODO: Update data (auto on wakeup, drag to refresh, refresh button)
+  // FIX: Buttons not showing on device
 
+  const router = useRouter();
   const [weatherServices, setWeatherServices] = useState([] as WeatherService[]);
+  const [location, setLocation] = useState({} as Location);
   useEffect(() => {
-    getSelectedWeatherServices();
+    initApp();
   }, []);
 
-  const getSelectedWeatherServices = async () => {
+  const initApp = async () => {
+    const selectedLocation = await loadLocationState();
+    if (selectedLocation) {
+      setLocation(selectedLocation)
+    } else {
+      router.navigate('./searchLocation')
+    }
+
     const selectedWeatherServices = await loadWeatherServiceSelectionState();
     if (selectedWeatherServices && selectedWeatherServices.length > 0) {
       setWeatherServices(selectedWeatherServices);
     }
   }
 
-  return (
-    <ScrollView>
-      {weatherServices.includes(WeatherService.SMHI) && (
-        <WeatherServiceComponent weatherService={WeatherService.SMHI}></WeatherServiceComponent>
-      )}
+  const getScrollViewHeight = () => {
+    const scrollHeight = 230 * weatherServices.length
+    return { height: scrollHeight }
+  }
 
-      {weatherServices.includes(WeatherService.YR) && (
-        <WeatherServiceComponent weatherService={WeatherService.YR}></WeatherServiceComponent>
-      )}
-    </ScrollView>
+  return (
+    <View style={{ height: "100%" }}>
+      <View style={styles.headerContainer}>
+        <Pressable onPress={() => router.navigate('./weatherServiceSelection')}>
+          <Image style={styles.headerIcon} source={require("@/assets/settings.svg")}></Image>
+        </Pressable>
+        <View>
+          <Text>{location.name}</Text>
+        </View>
+        <Pressable onPress={() => router.navigate('./searchLocation')}>
+          <Image style={styles.headerIcon} source={require("@/assets/search.svg")}></Image>
+        </Pressable>
+      </View>
+      <ScrollView style={getScrollViewHeight()}>
+        {weatherServices.includes(WeatherService.SMHI) && (
+          <WeatherServiceComponent weatherService={WeatherService.SMHI} location={location}></WeatherServiceComponent>
+        )}
+
+        {weatherServices.includes(WeatherService.YR) && (
+          <WeatherServiceComponent weatherService={WeatherService.YR} location={location}></WeatherServiceComponent>
+        )}
+      </ScrollView>
+    </View>
   )
 }
+
 const styles = StyleSheet.create({
+  headerContainer: {
+    height: 100,
+    width: "100%",
+    backgroundColor: "#FFF",
+    borderBottomWidth: 1,
+    borderBottomColor: "#BBB",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    marginBottom: 5,
+  },
+  headerIcon: {
+    height: 30,
+    width: 30,
+    margin: 10,
+  },
   container: {
-    height: "100%",
+    height: "100%"
   },
 })
-
