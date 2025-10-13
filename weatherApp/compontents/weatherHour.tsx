@@ -34,7 +34,7 @@ export default function WeatherHour({ hour }: { hour: Hour }) {
     <View style={styles.container}>
       <Text numberOfLines={1} style={styles.text}>{time.format("HH:mm")}</Text>
       <View style={styles.weatherIcon}>
-        <WeatherIcon hour={hour}></WeatherIcon>
+        <WeatherIcon hour={hour} />
       </View>
       <Text style={styles.text}>{hour.temp}°</Text>
       <Text style={[styles.text, getPercipitationProbabilityStyles()]}>{percipitationProbability}</Text>

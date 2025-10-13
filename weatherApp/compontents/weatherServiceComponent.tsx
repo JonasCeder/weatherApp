@@ -55,12 +55,12 @@ export default function WeatherServiceComponent({ weatherService, location }: { 
       <View style={[styles.weatherServiceContaier, styles.smhiWeatherServiceContainer]}>
         <Image style={getLogoStyles()} source={logo} />
         {now && (
-          <WeatherCard hour={now} maxTemp={today.MaxTemp} minTemp={today.MinTemp} location={location}></WeatherCard>
+          <WeatherCard hour={now} maxTemp={today.MaxTemp} minTemp={today.MinTemp} location={location} />
         )}
         <ScrollView horizontal={true} style={styles.scrollView}>
           <View style={styles.weatherHourContainer}>
             {today.Hours && today.Hours.length && today.Hours.map((hour, index) => (
-              <WeatherHour key={index} hour={hour}></WeatherHour>
+              <WeatherHour key={index} hour={hour} />
             ))}
           </View>
         </ScrollView>

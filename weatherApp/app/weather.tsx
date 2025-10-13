@@ -13,7 +13,6 @@ export default function Weather() {
   // TODO: Day details?
   // TODO: Fetch cache
   // TODO: Update data (auto on wakeup, drag to refresh, refresh button)
-  // FIX: Buttons not showing on device
 
   const router = useRouter();
   const [weatherServices, setWeatherServices] = useState([] as WeatherService[]);
@@ -45,22 +44,22 @@ export default function Weather() {
     <View style={{ height: "100%" }}>
       <View style={styles.headerContainer}>
         <Pressable onPress={() => router.navigate('./weatherServiceSelection')}>
-          <Image style={styles.headerIcon} source={require("@/assets/settings.svg")}></Image>
+          <Image style={styles.headerIcon} source={require("@/assets/settings.png")}></Image>
         </Pressable>
-        <View>
-          <Text>{location.name}</Text>
+        <View style={styles.textContainer}>
+          <Text style={styles.locationName}>{location.name}</Text>
         </View>
         <Pressable onPress={() => router.navigate('./searchLocation')}>
-          <Image style={styles.headerIcon} source={require("@/assets/search.svg")}></Image>
+          <Image style={styles.headerIcon} source={require("@/assets/search.png")}></Image>
         </Pressable>
       </View>
       <ScrollView style={getScrollViewHeight()}>
         {weatherServices.includes(WeatherService.SMHI) && (
-          <WeatherServiceComponent weatherService={WeatherService.SMHI} location={location}></WeatherServiceComponent>
+          <WeatherServiceComponent weatherService={WeatherService.SMHI} location={location} />
         )}
 
         {weatherServices.includes(WeatherService.YR) && (
-          <WeatherServiceComponent weatherService={WeatherService.YR} location={location}></WeatherServiceComponent>
+          <WeatherServiceComponent weatherService={WeatherService.YR} location={location} />
         )}
       </ScrollView>
     </View>
@@ -84,8 +83,16 @@ const styles = StyleSheet.create({
     height: 30,
     width: 30,
     margin: 10,
+    color: "rgb(18, 33, 43)"
   },
   container: {
     height: "100%"
   },
+  textContainer: {
+    padding: 15,
+  },
+  locationName: {
+    fontWeight: "bold",
+    fontSize: 16
+  }
 })
