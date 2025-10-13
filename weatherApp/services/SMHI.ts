@@ -1,9 +1,10 @@
 import { getWeatherSymbolById } from "@/classes/weatherSymbol";
 import { Day } from "@/classes/day";
 import { Hour } from "@/interfaces/hour";
+import { WeatherData } from "@/classes/weatherData";
 
 const baseUrl = "https://opendata-download-metfcst.smhi.se/api/category/snow1g/version/1";
-export const getSMHIWeatherData = async ({ lat, lon }: { lat: number, lon: number }): Promise<Day> => {
+export const getSMHIWeatherData = async ({ lat, lon }: { lat: number, lon: number }): Promise<WeatherData> => {
   const weatherData = await fetch(`${baseUrl}/geotype/point/lon/${lon}/lat/${lat}/data.json`).then(async (result) => {
     return result.json();
   })
@@ -24,5 +25,5 @@ export const getSMHIWeatherData = async ({ lat, lon }: { lat: number, lon: numbe
     hours.push(hour);
   })
 
-  return new Day(hours);
+  return new WeatherData(hours);
 }

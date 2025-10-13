@@ -9,7 +9,6 @@ import BackButton from '@/compontents/backButton';
 
 export default function SearchLocation() {
   // NOTE: Add default locations based on service selected?
-  // TODO: Add back button
 
   const router = useRouter();
   const [recentLocations, setRecentLocations] = useState([] as Location[]);

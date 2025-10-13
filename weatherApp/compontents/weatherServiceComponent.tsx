@@ -13,8 +13,10 @@ import { Location } from "@/types/location";
 export default function WeatherServiceComponent({ weatherService, location }: { weatherService: WeatherService, location: Location }) {
   // TODO: Get coodrinates from phone location 
   const [logo, setLogo] = useState("")
-  const [today, setToday] = useState({} as Day);
+  const [today, setToday] = useState([] as Hour[]);
   const [now, setNow] = useState({} as Hour)
+  const [maxTemp, setMaxTemp] = useState(0);
+  const [minTemp, setMinTemp] = useState(0);
   const lat = location.lat;
   const lon = location.lon;
 
@@ -22,15 +24,21 @@ export default function WeatherServiceComponent({ weatherService, location }: { 
     switch (weatherService) {
       case WeatherService.SMHI:
         getSMHIWeatherData({ lat, lon }).then((weatherData) => {
-          setNow(weatherData.getWeatherNow());
-          setToday(weatherData);
+          const todayWeather = weatherData.get24Hours();
+          setMaxTemp(weatherData.getMaxTemp(todayWeather));
+          setMinTemp(weatherData.getMinTemp(todayWeather));
+          setNow(weatherData.getNow());
+          setToday(todayWeather);
           setLogo(WEATHER_SERVICE_ICON_PATH.shmhi);
         })
         break;
       case WeatherService.YR:
         getYRWeatherData({ lat, lon }).then((weatherData) => {
-          setNow(weatherData.getWeatherNow());
-          setToday(weatherData);
+          const todayWeather = weatherData.get24Hours();
+          setMaxTemp(weatherData.getMaxTemp(todayWeather));
+          setMinTemp(weatherData.getMinTemp(todayWeather));
+          setNow(weatherData.getNow());
+          setToday(todayWeather);
           setLogo(WEATHER_SERVICE_ICON_PATH.yr);
         })
         break;
@@ -55,11 +63,11 @@ export default function WeatherServiceComponent({ weatherService, location }: { 
       <View style={[styles.weatherServiceContaier, styles.smhiWeatherServiceContainer]}>
         <Image style={getLogoStyles()} source={logo} />
         {now && (
-          <WeatherCard hour={now} maxTemp={today.MaxTemp} minTemp={today.MinTemp} location={location} />
+          <WeatherCard hour={now} maxTemp={maxTemp} minTemp={minTemp} location={location} />
         )}
         <ScrollView horizontal={true} style={styles.scrollView}>
           <View style={styles.weatherHourContainer}>
-            {today.Hours && today.Hours.length && today.Hours.map((hour, index) => (
+            {today && today.length && today.map((hour, index) => (
               <WeatherHour key={index} hour={hour} />
             ))}
           </View>
