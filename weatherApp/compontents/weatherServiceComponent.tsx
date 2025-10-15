@@ -3,16 +3,19 @@ import { getYRWeatherData } from "@/services/YR";
 import { useEffect, useState } from "react"
 import { View, StyleSheet, ScrollView, Image } from "react-native";
 import WeatherCard from "@/compontents/weatherCard";
-import { Hour } from "@/interfaces/hour";
-import { Day } from "@/classes/day";
 import WeatherHour from "@/compontents/weatherHour";
 import { WeatherService } from "@/enums/weatherService";
 import { WEATHER_SERVICE_ICON_PATH } from "@/utils/weatherServiceIconPaths";
 import { Location } from "@/types/location";
+import { Hour } from "@/classes/hour";
+import { Day } from "@/classes/day";
+import WeatherDay from "./weatherDay";
+import WeatherHourList from "./weatherHourList";
 
 export default function WeatherServiceComponent({ weatherService, location }: { weatherService: WeatherService, location: Location }) {
   // TODO: Get coodrinates from phone location 
   const [logo, setLogo] = useState("")
+  const [days, setDays] = useState([] as Day[]);
   const [today, setToday] = useState([] as Hour[]);
   const [now, setNow] = useState({} as Hour)
   const [maxTemp, setMaxTemp] = useState(0);
@@ -25,6 +28,7 @@ export default function WeatherServiceComponent({ weatherService, location }: { 
       case WeatherService.SMHI:
         getSMHIWeatherData({ lat, lon }).then((weatherData) => {
           const todayWeather = weatherData.get24Hours();
+          setDays(weatherData.days);
           setMaxTemp(weatherData.getMaxTemp(todayWeather));
           setMinTemp(weatherData.getMinTemp(todayWeather));
           setNow(weatherData.getNow());
@@ -35,6 +39,7 @@ export default function WeatherServiceComponent({ weatherService, location }: { 
       case WeatherService.YR:
         getYRWeatherData({ lat, lon }).then((weatherData) => {
           const todayWeather = weatherData.get24Hours();
+          setDays(weatherData.days);
           setMaxTemp(weatherData.getMaxTemp(todayWeather));
           setMinTemp(weatherData.getMinTemp(todayWeather));
           setNow(weatherData.getNow());
@@ -65,13 +70,12 @@ export default function WeatherServiceComponent({ weatherService, location }: { 
         {now && (
           <WeatherCard hour={now} maxTemp={maxTemp} minTemp={minTemp} location={location} />
         )}
-        <ScrollView horizontal={true} style={styles.scrollView}>
-          <View style={styles.weatherHourContainer}>
-            {today && today.length && today.map((hour, index) => (
-              <WeatherHour key={index} hour={hour} />
-            ))}
-          </View>
-        </ScrollView>
+        <WeatherHourList hours={today} />
+        <View style={styles.weatherDayContainer}>
+          {days && days.length && days.map((day) => (
+            <WeatherDay key={day.date} day={day} />
+          ))}
+        </View>
       </View>
     </View>
   )
@@ -110,6 +114,11 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
     height: 80,
     width: 80
-  }
+  },
+  weatherDayContainer: {
+    marginTop: 30,
+    display: 'flex',
+    rowGap: 10
+  },
 })
 

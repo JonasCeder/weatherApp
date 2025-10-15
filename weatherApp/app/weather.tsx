@@ -13,6 +13,7 @@ export default function Weather() {
   // TODO: Day details?
   // TODO: Fetch cache
   // TODO: Update data (auto on wakeup, drag to refresh, refresh button)
+  // TODO: Loading animation
 
   const router = useRouter();
   const [weatherServices, setWeatherServices] = useState([] as WeatherService[]);

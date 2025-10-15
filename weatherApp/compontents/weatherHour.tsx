@@ -1,12 +1,12 @@
-import { Hour } from "@/interfaces/hour";
 import { View, Text, StyleSheet } from "react-native";
 import WeatherIcon from "./weatherIcon";
 import moment from "moment"
 import { useEffect, useState } from "react";
+import { Hour } from "@/classes/hour";
+import PercipitationProbability from "./percipitationProbability";
 
 export default function WeatherHour({ hour }: { hour: Hour }) {
   const time = moment(hour.date);
-  const [percipitationProbability, setPrecipitationProbability] = useState("");
   const [percipitation, setPrecipitation] = useState("");
 
   useEffect(() => {
@@ -14,21 +14,7 @@ export default function WeatherHour({ hour }: { hour: Hour }) {
       ? `${hour.precipitationAmountMin}-${hour.precipitationAmountMax}`
       : "0"
     setPrecipitation(percipitationText);
-    const percipitationProbabilityText = hour.probabilityOfPrecipitation > 0
-      ? `${hour.probabilityOfPrecipitation}%`
-      : "";
-    setPrecipitationProbability(percipitationProbabilityText);
   }, [hour])
-
-  const getPercipitationProbabilityStyles = () => {
-    if (hour.probabilityOfPrecipitation > 40) {
-      return { borderRadius: 10, padding: 5, backgroundColor: "#99D6FF" }
-    }
-
-    if (hour.probabilityOfPrecipitation > 0) {
-      return { borderRadius: 10, padding: 5, backgroundColor: "#EBEEF0" }
-    }
-  }
 
   return (
     <View style={styles.container}>
@@ -37,7 +23,7 @@ export default function WeatherHour({ hour }: { hour: Hour }) {
         <WeatherIcon hour={hour} />
       </View>
       <Text style={styles.text}>{hour.temp}°</Text>
-      <Text style={[styles.text, getPercipitationProbabilityStyles()]}>{percipitationProbability}</Text>
+      <PercipitationProbability percipitationProbability={hour.probabilityOfPrecipitation} />
       <View style={styles.text}>
         <Text style={[styles.percipitation]}>{percipitation}</Text>
         <Text style={[styles.percipitation]}>mm</Text>

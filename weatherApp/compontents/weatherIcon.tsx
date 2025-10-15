@@ -1,8 +1,8 @@
-import { Hour } from "@/interfaces/hour";
 import { Image } from "expo-image";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { WEATHER_ICON_PATH } from "@/utils/weatherIconPaths";
+import { Hour } from "@/classes/hour";
 
 export default function WeatherIcon({ hour }: { hour: Hour }) {
   const [symbolCode, setSymbolCode] = useState("");
@@ -21,7 +21,7 @@ export default function WeatherIcon({ hour }: { hour: Hour }) {
       if ((hourTime > dayTimeLimit)) {
         weatherSymbol = WEATHER_ICON_PATH[weatherSymbolCode].day;
       }
-      if ((hourTime > nightTimeLimit) || (hourTime < dayTimeLimit)) {
+      if ((hourTime >= nightTimeLimit) || (hourTime <= dayTimeLimit)) {
         weatherSymbol = WEATHER_ICON_PATH[weatherSymbolCode].night;
       }
 

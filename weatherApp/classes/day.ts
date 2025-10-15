@@ -1,4 +1,4 @@
-import { Hour } from "@/interfaces/hour";
+import { Hour } from "./hour";
 
 export class Day {
   hours: Hour[];
@@ -9,22 +9,6 @@ export class Day {
   constructor(date: string, hours: Hour[]) {
     if (!hours || hours === undefined) this.hours = [];
 
-    // TODO: Remove day and only have Hours?
-    // hours = hours.filter((hour) => {
-    //   const hourTime = hour.date.toISOString().slice(0, -1);
-    //   const hourDate: Date = new Date(Date.parse(hourTime));
-    //   const todayDate: Date = new Date(Date.now());
-
-    //   hourDate.setHours(0, 0, 0, 0);
-    //   todayDate.setHours(0, 0, 0, 0);
-
-    //   return hourDate.getTime() === todayDate.getTime();
-    // });
-
-    // hours = hours.map((hour) => {
-    //   hour.temp = Math.round(hour.temp || 0)
-    //   return hour;
-    // })
     this.date = date;
     this.hours = hours;
 
@@ -42,5 +26,50 @@ export class Day {
 
   getWeatherNow(): Hour {
     return this.hours[0];
+  }
+
+  getMidDay(): Hour {
+    let midDay = this.hours.filter((hour) => {
+      return hour.date.getHours() === 12;
+    })
+
+    if (midDay.length) {
+      return this.hours[0];
+    }
+
+    midDay = this.hours.filter((hour) => {
+      return hour.date.getHours() === 14;
+    })
+
+    if (midDay.length) {
+      return midDay[0];
+    }
+
+    return this.hours[0];
+  }
+
+  getPrecipitationString(): string {
+    const precipMin = this.hours
+      .map((hour) => hour.precipitationAmountMin)
+      .filter(precip => precip !== 0);
+    const precipMax = this.hours
+      .map((hour) => hour.precipitationAmountMax)
+      .filter(precip => precip !== 0);
+
+    if (!precipMin.length || !precipMax.length) return "0";
+
+    const minPrecip = Math.min(...precipMin);
+    const maxPrecip = Math.max(...precipMax);
+
+    return `${minPrecip} - ${maxPrecip}`;
+  }
+  getMaxProbabilityOfPercipitation(): number {
+    const probPercip = this.hours
+      .map((hour) => hour.probabilityOfPrecipitation)
+      .filter(pB => pB !== 0);
+
+    if (!probPercip.length) return 0
+
+    return Math.max(...probPercip);
   }
 }

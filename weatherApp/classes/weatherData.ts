@@ -1,5 +1,5 @@
-import { Hour } from "@/interfaces/hour";
 import { Day } from "./day";
+import { Hour } from "./hour";
 
 export class WeatherData {
   days: Day[]
@@ -18,7 +18,11 @@ export class WeatherData {
       return acc;
     }, {});
 
-    const days = Object.keys(groupedByDate).map(date => new Day(date, groupedByDate[date]));
+    let days = Object.keys(groupedByDate).map(date => new Day(date, groupedByDate[date]));
+
+    days = days.filter(day => {
+      return day.hours.length > 1;
+    })
     this.days = days;
   }
 
@@ -32,7 +36,7 @@ export class WeatherData {
         return itemDate >= now && itemDate <= next24h;
       })
     );
-    console.log(result)
+
     return result;
   }
 
@@ -45,6 +49,7 @@ export class WeatherData {
     const temps = hours.map((hour) => hour.temp || 0);
     return Math.min(...temps);
   }
+
   getNow(): Hour {
     return this.days[0].hours[0];
   }
