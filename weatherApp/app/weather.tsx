@@ -10,11 +10,11 @@ import moment from "moment";
 
 export default function Weather() {
   // TODO: Get coodrinates from phone location
-  // TODO: Add 10 days
   // TODO: Day details?
   // TODO: Fetch cache
   // TODO: Update data (auto on wakeup, drag to refresh, refresh button)
   // TODO: Loading animation
+  // TODO: Add wind speeds
 
   const router = useRouter();
   const [weatherServices, setWeatherServices] = useState([] as WeatherService[]);

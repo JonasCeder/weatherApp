@@ -1,9 +1,8 @@
 import { getSMHIWeatherData } from "@/services/SMHI";
 import { getYRWeatherData } from "@/services/YR";
 import { useEffect, useState } from "react"
-import { View, StyleSheet, ScrollView, Image } from "react-native";
+import { View, StyleSheet, Image } from "react-native";
 import WeatherCard from "@/compontents/weatherCard";
-import WeatherHour from "@/compontents/weatherHour";
 import { WeatherService } from "@/enums/weatherService";
 import { WEATHER_SERVICE_ICON_PATH } from "@/utils/weatherServiceIconPaths";
 import { Location } from "@/types/location";
@@ -13,7 +12,6 @@ import WeatherDay from "./weatherDay";
 import WeatherHourList from "./weatherHourList";
 
 export default function WeatherServiceComponent({ weatherService, location }: { weatherService: WeatherService, location: Location }) {
-  // TODO: Get coodrinates from phone location 
   const [logo, setLogo] = useState("")
   const [days, setDays] = useState([] as Day[]);
   const [today, setToday] = useState([] as Hour[]);

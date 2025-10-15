@@ -3,7 +3,7 @@ import { loadWeatherServiceSelectionState, saveWeatherServicesSelectionState } f
 import { WeatherService } from "@/enums/weatherService";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import BackButton from "@/compontents/backButton";
+import Header from "@/compontents/header";
 
 export default function WeatherServiceSelection() {
   const router = useRouter();
@@ -38,9 +38,7 @@ export default function WeatherServiceSelection() {
 
   return (
     <View style={styles.containerGradient}>
-      <View style={styles.headerContainer}>
-        <BackButton />
-      </View>
+      <Header text="Välj väder tjänster" />
       <View style={styles.viewContainer}>
         <Pressable style={[styles.weatherServiceButton, styles.shmhiServiceButton]} onPress={() => handleWeatherServiceSelection(WeatherService.SMHI)}>
           <Image style={styles.smhilogo} source={require("@/assets/SMHILogo.png")} />

@@ -1,20 +1,28 @@
 import GooglePlacesTextInput from 'react-native-google-places-textinput';
 import { View, StyleSheet, Pressable, Text, Image } from 'react-native';
-import { saveLocationState } from '@/state/locationState';
+import { loadLocationState, saveLocationState } from '@/state/locationState';
 import { Location } from '@/types/location';
 import { useRouter } from 'expo-router';
 import { loadRecentLocationsState, saveRecentLocationState } from '@/state/recentLocationsState';
 import { useEffect, useState } from 'react';
 import BackButton from '@/compontents/backButton';
+import Header from '@/compontents/header';
 
 export default function SearchLocation() {
   // NOTE: Add default locations based on service selected?
 
   const router = useRouter();
   const [recentLocations, setRecentLocations] = useState([] as Location[]);
+  const [showBackButton, setShowBackButton] = useState(false);
   useEffect(() => {
     loadRecentLocationsState().then((recentLocationsState) => {
       setRecentLocations(recentLocationsState ?? []);
+    });
+
+    loadLocationState().then((location) => {
+      if (location !== undefined) {
+        setShowBackButton(true);
+      }
     })
   }, [])
 
@@ -41,10 +49,8 @@ export default function SearchLocation() {
   }
 
   return (
-    <View style={styles.searchContainer}>
-      <View style={styles.headerContainer}>
-        <BackButton />
-      </View>
+    <View>
+      <Header text='Sök och välj ort' showBackButton={showBackButton} />
       <View>
         <GooglePlacesTextInput
           apiKey=""
@@ -56,7 +62,7 @@ export default function SearchLocation() {
         <Image style={styles.searchIcon} source={require("@/assets/search.png")}></Image>
       </View>
       <View style={styles.recentLocationsContainer}>
-        {recentLocations && recentLocations.length && recentLocations.map((recentLocation) => (
+        {recentLocations && recentLocations.length > 0 && recentLocations.map((recentLocation) => (
           <Pressable style={styles.recentLocation} key={recentLocation.name} onPress={() => handleRecentLocationSelect(recentLocation)} >
             <Text>{recentLocation.name}</Text>
           </Pressable>
@@ -93,7 +99,16 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     width: "100%",
     display: 'flex',
-    justifyContent: 'flex-end',
+    alignItems: "center",
+    position: "relative",
+    flexDirection: 'row',
+  },
+  headerText: {
+    position: "absolute",
+    left: "50%",
+    transform: "translateX(-50%)",
+    fontSize: 20,
+    fontWeight: "bold"
   },
 });
 
@@ -145,5 +160,6 @@ const materialStyles = {
     color: '#FFFFFF',
     fontSize: 22,
     fontWeight: '400',
+    bottom: 1
   }
 };
