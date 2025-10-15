@@ -6,6 +6,7 @@ import WeatherServiceComponent from "@/compontents/weatherServiceComponent";
 import { useRouter } from "expo-router";
 import { loadLocationState } from "@/state/locationState";
 import { Location } from "@/types/location";
+import moment from "moment";
 
 export default function Weather() {
   // TODO: Get coodrinates from phone location
@@ -18,6 +19,7 @@ export default function Weather() {
   const router = useRouter();
   const [weatherServices, setWeatherServices] = useState([] as WeatherService[]);
   const [location, setLocation] = useState({} as Location);
+  const [lastUpdated, setLastUpdated] = useState("");
   useEffect(() => {
     initApp();
   }, []);
@@ -34,6 +36,8 @@ export default function Weather() {
     if (selectedWeatherServices && selectedWeatherServices.length > 0) {
       setWeatherServices(selectedWeatherServices);
     }
+    const updatedTime = moment(new Date())
+    setLastUpdated(updatedTime.format("HH:mm"))
   }
 
   const getScrollViewHeight = () => {
@@ -48,6 +52,7 @@ export default function Weather() {
           <Image style={styles.headerIcon} source={require("@/assets/settings.png")}></Image>
         </Pressable>
         <View style={styles.textContainer}>
+          <Text>Senaste updaterad: {lastUpdated}</Text>
           <Text style={styles.locationName}>{location.name}</Text>
         </View>
         <Pressable onPress={() => router.navigate('./searchLocation')}>
@@ -90,7 +95,8 @@ const styles = StyleSheet.create({
     height: "100%"
   },
   textContainer: {
-    padding: 15,
+    padding: 10,
+    alignItems: 'center',
   },
   locationName: {
     fontWeight: "bold",
