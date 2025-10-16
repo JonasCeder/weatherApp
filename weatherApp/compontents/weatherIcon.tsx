@@ -25,7 +25,6 @@ export default function WeatherIcon({ hour }: { hour: Hour }) {
         weatherSymbol = WEATHER_ICON_PATH[weatherSymbolCode].night;
       }
 
-      console.log(weatherSymbol);
       setSymbolCode(weatherSymbol);
     }
   }, [hour])
