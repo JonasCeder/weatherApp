@@ -11,7 +11,7 @@ import { Day } from "@/classes/day";
 import WeatherDay from "./weatherDay";
 import WeatherHourList from "./weatherHourList";
 
-export default function WeatherServiceComponent({ weatherService, location }: { weatherService: WeatherService, location: Location }) {
+export default function WeatherServiceComponent({ weatherService, location, onLoadingComplete }: { weatherService: WeatherService, location: Location, onLoadingComplete: () => void }) {
   const [logo, setLogo] = useState("")
   const [days, setDays] = useState([] as Day[]);
   const [today, setToday] = useState([] as Hour[]);
@@ -32,6 +32,7 @@ export default function WeatherServiceComponent({ weatherService, location }: { 
           setNow(weatherData.getNow());
           setToday(todayWeather);
           setLogo(WEATHER_SERVICE_ICON_PATH.shmhi);
+          onLoadingComplete();
         })
         break;
       case WeatherService.YR:
@@ -43,6 +44,7 @@ export default function WeatherServiceComponent({ weatherService, location }: { 
           setNow(weatherData.getNow());
           setToday(todayWeather);
           setLogo(WEATHER_SERVICE_ICON_PATH.yr);
+          onLoadingComplete();
         })
         break;
       default:
@@ -70,7 +72,7 @@ export default function WeatherServiceComponent({ weatherService, location }: { 
         )}
         <WeatherHourList hours={today} />
         <View style={styles.weatherDayContainer}>
-          {days && days.length && days.map((day) => (
+          {days.map((day) => (
             <WeatherDay key={day.date} day={day} />
           ))}
         </View>

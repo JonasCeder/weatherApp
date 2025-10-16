@@ -1,4 +1,4 @@
-import { ScrollView, View, StyleSheet, Text, Image, Pressable } from "react-native";
+import { ScrollView, View, StyleSheet, Text, Image, Pressable, ActivityIndicator } from "react-native";
 import { WeatherService } from "@/enums/weatherService";
 import { useEffect, useState } from "react";
 import { loadWeatherServiceSelectionState } from "@/state/selectedWeatherServiceState";
@@ -20,6 +20,7 @@ export default function Weather() {
   const [weatherServices, setWeatherServices] = useState([] as WeatherService[]);
   const [location, setLocation] = useState({} as Location);
   const [lastUpdated, setLastUpdated] = useState("");
+  const [loaded, setLoaded] = useState(false)
   useEffect(() => {
     initApp();
   }, []);
@@ -35,6 +36,8 @@ export default function Weather() {
     const selectedWeatherServices = await loadWeatherServiceSelectionState();
     if (selectedWeatherServices && selectedWeatherServices.length > 0) {
       setWeatherServices(selectedWeatherServices);
+    } else {
+      router.navigate('./weatherServiceSelection')
     }
     const updatedTime = moment(new Date())
     setLastUpdated(updatedTime.format("HH:mm"))
@@ -45,29 +48,41 @@ export default function Weather() {
     return { height: scrollHeight }
   }
 
+  const loadingComplete = () => {
+    setLoaded(true);
+  }
+
   return (
     <View style={{ height: "100%" }}>
-      <View style={styles.headerContainer}>
-        <Pressable onPress={() => router.navigate('./weatherServiceSelection')}>
-          <Image style={styles.headerIcon} source={require("@/assets/settings.png")}></Image>
-        </Pressable>
-        <View style={styles.textContainer}>
-          <Text>Senaste updaterad: {lastUpdated}</Text>
-          <Text style={styles.locationName}>{location.name}</Text>
+      {!loaded && (
+        <View style={styles.loading}>
+          <Image source={require("@/assets/fair_day.svg")} />
+          <Text style={styles.loadingText}>Laddar väder...</Text>
+          <ActivityIndicator size="large" color={"rgb(18, 33, 43)"} />
         </View>
-        <Pressable onPress={() => router.navigate('./searchLocation')}>
-          <Image style={styles.headerIcon} source={require("@/assets/search.png")}></Image>
-        </Pressable>
-      </View>
-      <ScrollView style={getScrollViewHeight()}>
-        {weatherServices.includes(WeatherService.SMHI) && (
-          <WeatherServiceComponent weatherService={WeatherService.SMHI} location={location} />
-        )}
-
-        {weatherServices.includes(WeatherService.YR) && (
-          <WeatherServiceComponent weatherService={WeatherService.YR} location={location} />
-        )}
-      </ScrollView>
+      )}
+      <>
+        <View style={styles.headerContainer}>
+          <Pressable onPress={() => router.navigate('./weatherServiceSelection')}>
+            <Image style={styles.headerIcon} source={require("@/assets/settings.png")}></Image>
+          </Pressable>
+          <View style={styles.textContainer}>
+            <Text>Senaste updaterad: {lastUpdated}</Text>
+            <Text style={styles.locationName}>{location.name}</Text>
+          </View>
+          <Pressable onPress={() => router.navigate('./searchLocation')}>
+            <Image style={styles.headerIcon} source={require("@/assets/search.png")}></Image>
+          </Pressable>
+        </View>
+        <ScrollView style={getScrollViewHeight()}>
+          {weatherServices.includes(WeatherService.SMHI) && (
+            <WeatherServiceComponent weatherService={WeatherService.SMHI} location={location} onLoadingComplete={loadingComplete} />
+          )}
+          {weatherServices.includes(WeatherService.YR) && (
+            <WeatherServiceComponent weatherService={WeatherService.YR} location={location} onLoadingComplete={loadingComplete} />
+          )}
+        </ScrollView>
+      </>
     </View>
   )
 }
@@ -101,5 +116,20 @@ const styles = StyleSheet.create({
   locationName: {
     fontWeight: "bold",
     fontSize: 16
-  }
+  },
+  loading: {
+    height: "100%",
+    width: "100%",
+    position: "absolute",
+    zIndex: 1,
+    backgroundColor: "rgba(240,248,255,1.00)",
+    display: "flex",
+    justifyContent: "center",
+    flexDirection: 'column',
+    alignItems: "center",
+  },
+  loadingText: {
+    fontSize: 30,
+    marginBottom: 30,
+  },
 })

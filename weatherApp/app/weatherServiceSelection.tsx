@@ -7,8 +7,9 @@ import Header from "@/compontents/header";
 
 export default function WeatherServiceSelection() {
   const router = useRouter();
-
   const [weatherServices, setWeatherServices] = useState([] as WeatherService[]);
+  const [showBackButton, setShowBackButton] = useState(false);
+
   useEffect(() => {
     getSelectedWeatherServices();
   }, []);
@@ -17,6 +18,8 @@ export default function WeatherServiceSelection() {
     const selectedWeatherServices = await loadWeatherServiceSelectionState();
     if (selectedWeatherServices && selectedWeatherServices.length > 0) {
       setWeatherServices(selectedWeatherServices);
+    } else {
+      setShowBackButton(true);
     }
   }
 
@@ -38,7 +41,7 @@ export default function WeatherServiceSelection() {
 
   return (
     <View style={styles.containerGradient}>
-      <Header text="Välj väder tjänster" />
+      <Header text="Välj väder tjänster" showBackButton={showBackButton} />
       <View style={styles.viewContainer}>
         <Pressable style={[styles.weatherServiceButton, styles.shmhiServiceButton]} onPress={() => handleWeatherServiceSelection(WeatherService.SMHI)}>
           <Image style={styles.smhilogo} source={require("@/assets/SMHILogo.png")} />

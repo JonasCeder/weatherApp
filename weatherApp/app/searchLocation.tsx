@@ -29,18 +29,15 @@ export default function SearchLocation() {
   const response = { "details": { "displayName": { "languageCode": "en", "text": "Mora" }, "formattedAddress": "Mora, Sweden", "id": "ChIJpWmgeUTbZ0YR-cUlkAQU-RQ", "location": { "latitude": 61.004878, "longitude": 14.537003 } }, "place": "places/ChIJpWmgeUTbZ0YR-cUlkAQU-RQ", "placeId": "ChIJpWmgeUTbZ0YR-cUlkAQU-RQ", "structuredFormat": { "mainText": { "matches": [Array], "text": "Mora" }, "secondaryText": { "text": "Sweden" } }, "text": { "matches": [[Object]], "text": "Mora, Sweden" }, "types": ["political", "geocode", "locality"] };
   const testLocation = { lat: 61.004878, lon: 14.537003, name: "Mora, Sweden" } as Location;
   const handlePlaceSelect = (place) => {
-    console.log(place)
     let lat = place.details.location.latitude as number;
     let lon = place.details.location.longitude as number;
     const name = place.details.formattedAddress as string;
     lat = Number(lat.toFixed(6));
     lon = Number(lon.toFixed(6));
     const location = { lat: lat, lon: lon, name: name } as Location;
-    console.log(location);
+    // const location = testLocation;
     saveLocationState(location);
     saveRecentLocationState(location);
-    // saveLocationState(testLocation);
-    // saveRecentLocationState(testLocation);
     router.navigate('./weather')
   };
   function handleRecentLocationSelect(recentLocation: Location): void {

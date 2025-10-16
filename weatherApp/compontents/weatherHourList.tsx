@@ -6,7 +6,7 @@ export default function WeatherHourList({ hours }: { hours: Hour[] }) {
   return (
     <ScrollView horizontal={true} contentInsetAdjustmentBehavior="automatic" style={styles.scrollView}>
       <View style={styles.weatherHourContainer}>
-        {hours && hours.length && hours.map((hour, index) => (
+        {hours.map((hour, index) => (
           <WeatherHour key={index} hour={hour} />
         ))}
       </View>

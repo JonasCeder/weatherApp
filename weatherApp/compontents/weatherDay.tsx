@@ -112,6 +112,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     display: 'flex',
     alignItems: 'flex-end',
+    minWidth: 70
   },
   dateString: {
     lineHeight: 24
