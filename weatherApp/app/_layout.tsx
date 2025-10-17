@@ -5,5 +5,6 @@ export default function RootLayout() {
     <Stack.Screen name="index" />
     <Stack.Screen name="weather" />
     <Stack.Screen name="weatherServiceSelection" />
+    <Stack.Screen name="searchLocation" />
   </Stack>;
 }

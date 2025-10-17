@@ -25,32 +25,36 @@ export default function WeatherServiceComponent({ weatherService, location, onLo
     switch (weatherService) {
       case WeatherService.SMHI:
         getSMHIWeatherData({ lat, lon }).then((weatherData) => {
-          const todayWeather = weatherData.get24Hours();
-          setDays(weatherData.days);
-          setMaxTemp(weatherData.getMaxTemp(todayWeather));
-          setMinTemp(weatherData.getMinTemp(todayWeather));
-          setNow(weatherData.getNow());
-          setToday(todayWeather);
-          setLogo(WEATHER_SERVICE_ICON_PATH.shmhi);
-          onLoadingComplete();
+          if (weatherData !== null) {
+            const todayWeather = weatherData.get24Hours();
+            setDays(weatherData.days);
+            setMaxTemp(weatherData.getMaxTemp(todayWeather));
+            setMinTemp(weatherData.getMinTemp(todayWeather));
+            setNow(weatherData.getNow());
+            setToday(todayWeather);
+            setLogo(WEATHER_SERVICE_ICON_PATH.shmhi);
+            onLoadingComplete();
+          }
         })
         break;
       case WeatherService.YR:
         getYRWeatherData({ lat, lon }).then((weatherData) => {
-          const todayWeather = weatherData.get24Hours();
-          setDays(weatherData.days);
-          setMaxTemp(weatherData.getMaxTemp(todayWeather));
-          setMinTemp(weatherData.getMinTemp(todayWeather));
-          setNow(weatherData.getNow());
-          setToday(todayWeather);
-          setLogo(WEATHER_SERVICE_ICON_PATH.yr);
-          onLoadingComplete();
+          if (weatherData !== null) {
+            const todayWeather = weatherData.get24Hours();
+            setDays(weatherData.days);
+            setMaxTemp(weatherData.getMaxTemp(todayWeather));
+            setMinTemp(weatherData.getMinTemp(todayWeather));
+            setNow(weatherData.getNow());
+            setToday(todayWeather);
+            setLogo(WEATHER_SERVICE_ICON_PATH.yr);
+            onLoadingComplete();
+          }
         })
         break;
       default:
         break;
     }
-  }, [weatherService])
+  }, [weatherService, lat, lon, onLoadingComplete])
 
   const getLogoStyles = () => {
     switch (weatherService) {

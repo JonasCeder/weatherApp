@@ -63,6 +63,7 @@ export class Day {
 
     return `${minPrecip} - ${maxPrecip}`;
   }
+
   getMaxProbabilityOfPercipitation(): number {
     const probPercip = this.hours
       .map((hour) => hour.probabilityOfPrecipitation)

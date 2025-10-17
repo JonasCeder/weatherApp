@@ -2,12 +2,16 @@ import { Day } from "./day";
 import { Hour } from "./hour";
 
 export class WeatherData {
-  days: Day[]
-  constructor(hours: Hour[]) {
+  days: Day[];
+  fetchTime: Date;
+  lat: number;
+  lon: number;
+
+  constructor(hours: Hour[], fetchTime: Date, lat: number, lon: number) {
     hours = hours.map((hour) => {
       hour.temp = Math.round(hour.temp || 0)
       return hour;
-    })
+    });
 
     const groupedByDate = hours.reduce<Record<string, Hour[]>>((acc, hour) => {
       const day = hour.date.toISOString().slice(0, 10);
@@ -22,7 +26,11 @@ export class WeatherData {
 
     days = days.filter(day => {
       return day.hours.length > 1;
-    })
+    });
+
+    this.lat = lat;
+    this.lon = lon;
+    this.fetchTime = fetchTime;
     this.days = days;
   }
 

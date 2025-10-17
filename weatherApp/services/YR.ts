@@ -1,10 +1,19 @@
-import { Day } from "@/classes/day";
+import { Hour } from "@/classes/hour";
 import { WeatherData } from "@/classes/weatherData";
 import { getWeatherSymbolBySymbolCode } from "@/classes/weatherSymbol";
-import { Hour } from "@/interfaces/hour";
+import { loadYRWeatherData, saveYRWeahterData, shouldReFetch } from "@/state/weatherDataState";
 
-export const getYRWeatherData = async ({ lat, lon }: { lat: number, lon: number }): Promise<WeatherData> => {
-  const weatherData = await fetch(`https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=${lat}&lon=${lon}`, {
+export const getYRWeatherData = async ({ lat, lon }: { lat: number, lon: number }): Promise<WeatherData | null> => {
+  const cachedWeatherData = await loadYRWeatherData();
+  if (shouldReFetch(cachedWeatherData, lat, lon)) {
+    return await fetchWeatherData(lat, lon);
+  }
+
+  return cachedWeatherData;
+};
+
+const fetchWeatherData = async (lat: number, lon: number): Promise<WeatherData> => {
+  const yrWeatherData = await fetch(`https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=${lat}&lon=${lon}`, {
     headers: {
       "User-Agent": "weatherApp (https://github.com/JonasCeder/weatherApp)",
     },
@@ -13,7 +22,7 @@ export const getYRWeatherData = async ({ lat, lon }: { lat: number, lon: number 
   })
 
   let hours = [] as Hour[];
-  weatherData.properties.timeseries.map((result: any) => {
+  yrWeatherData.properties.timeseries.map((result: any) => {
     const summary = result.data.next_1_hours?.summary ?? result.data.next_6_hours?.summary;
     if (summary === undefined) return;
 
@@ -36,7 +45,12 @@ export const getYRWeatherData = async ({ lat, lon }: { lat: number, lon: number 
       precipitationAmountMax: details.precipitation_amount_max,
       precipitationAmountMin: details.precipitation_amount_min
     };
-    hours.push(hour)
-  })
-  return new WeatherData(hours);
-}
+
+    hours.push(hour);
+  });
+
+  const fetchTime = new Date();
+  const weatherData = new WeatherData(hours, fetchTime, lat, lon);
+  saveYRWeahterData({ hours, fetchTime, lat, lon });
+  return weatherData;
+};

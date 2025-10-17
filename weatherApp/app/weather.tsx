@@ -1,6 +1,6 @@
-import { ScrollView, View, StyleSheet, Text, Image, Pressable, ActivityIndicator } from "react-native";
+import { ScrollView, View, StyleSheet, Text, Image, Pressable, ActivityIndicator, RefreshControl } from "react-native";
 import { WeatherService } from "@/enums/weatherService";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { loadWeatherServiceSelectionState } from "@/state/selectedWeatherServiceState";
 import WeatherServiceComponent from "@/compontents/weatherServiceComponent";
 import { useRouter } from "expo-router";
@@ -11,16 +11,16 @@ import moment from "moment";
 export default function Weather() {
   // TODO: Get coodrinates from phone location
   // TODO: Day details?
-  // TODO: Fetch cache
-  // TODO: Update data (auto on wakeup, drag to refresh, refresh button)
-  // TODO: Loading animation
   // TODO: Add wind speeds
+  // FIX: Fetch times
 
   const router = useRouter();
   const [weatherServices, setWeatherServices] = useState([] as WeatherService[]);
   const [location, setLocation] = useState({} as Location);
   const [lastUpdated, setLastUpdated] = useState("");
-  const [loaded, setLoaded] = useState(false)
+  const [loaded, setLoaded] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+
   useEffect(() => {
     initApp();
   }, []);
@@ -42,6 +42,16 @@ export default function Weather() {
     const updatedTime = moment(new Date())
     setLastUpdated(updatedTime.format("HH:mm"))
   }
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    setWeatherServices([]);
+    const selectedWeatherServices = await loadWeatherServiceSelectionState();
+    setWeatherServices(selectedWeatherServices ?? []);
+    const updatedTime = moment(new Date())
+    setLastUpdated(updatedTime.format("HH:mm"))
+    setRefreshing(false);
+  }, [])
 
   const getScrollViewHeight = () => {
     const scrollHeight = 230 * weatherServices.length
@@ -74,7 +84,9 @@ export default function Weather() {
             <Image style={styles.headerIcon} source={require("@/assets/search.png")}></Image>
           </Pressable>
         </View>
-        <ScrollView style={getScrollViewHeight()}>
+        <ScrollView style={getScrollViewHeight()} refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
           {weatherServices.includes(WeatherService.SMHI) && (
             <WeatherServiceComponent weatherService={WeatherService.SMHI} location={location} onLoadingComplete={loadingComplete} />
           )}

@@ -4,7 +4,6 @@ import { loadWeatherServiceSelectionState } from "../state/selectedWeatherServic
 import { loadLocationState } from "@/state/locationState";
 
 export default function Index() {
-  // FIX: Route to service selection and then search location
   const router = useRouter();
 
   useEffect(() => {

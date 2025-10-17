@@ -5,7 +5,6 @@ import { Location } from '@/types/location';
 import { useRouter } from 'expo-router';
 import { loadRecentLocationsState, saveRecentLocationState } from '@/state/recentLocationsState';
 import { useEffect, useState } from 'react';
-import BackButton from '@/compontents/backButton';
 import Header from '@/compontents/header';
 
 export default function SearchLocation() {
