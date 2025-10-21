@@ -3,6 +3,8 @@ import { WeatherData } from "@/classes/weatherData";
 import { getWeatherSymbolBySymbolCode } from "@/classes/weatherSymbol";
 import { loadYRWeatherData, saveYRWeahterData, shouldReFetch } from "@/state/weatherDataState";
 
+const baseUrl = "https://api.met.no/weatherapi/locationforecast/2.0/complete";
+
 export const getYRWeatherData = async ({ lat, lon }: { lat: number, lon: number }): Promise<WeatherData | null> => {
   const cachedWeatherData = await loadYRWeatherData();
   if (shouldReFetch(cachedWeatherData, lat, lon)) {
@@ -13,7 +15,7 @@ export const getYRWeatherData = async ({ lat, lon }: { lat: number, lon: number 
 };
 
 const fetchWeatherData = async (lat: number, lon: number): Promise<WeatherData> => {
-  const yrWeatherData = await fetch(`https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=${lat}&lon=${lon}`, {
+  const yrWeatherData = await fetch(`${baseUrl}?lat=${lat}&lon=${lon}`, {
     headers: {
       "User-Agent": "weatherApp (https://github.com/JonasCeder/weatherApp)",
     },
